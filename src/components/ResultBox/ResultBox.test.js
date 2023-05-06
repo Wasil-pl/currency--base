@@ -3,10 +3,10 @@ import ResultBox from './ResultBox';
 import '@testing-library/jest-dom/extend-expect';
 
 const testCases = [
-  { amount: '100', from: 'PLN', to: 'USD', result: '28.57' },
-  { amount: '20', from: 'USD', to: 'PLN', result: '70.00' },
-  { amount: '200', from: 'PLN', to: 'USD', result: '57.14' },
-  { amount: '345', from: 'USD', to: 'PLN', result: '1,207.50' },
+  { amount: '100', from: 'PLN', to: 'USD', expectedResult: 'PLN 100.00 = $28.57' },
+  { amount: '20', from: 'USD', to: 'PLN', expectedResult: '$20.00 = PLN 70.00' },
+  { amount: '200', from: 'PLN', to: 'USD', expectedResult: 'PLN 200.00 = $57.14' },
+  { amount: '345', from: 'USD', to: 'PLN', expectedResult: '$345.00 = PLN 1,207.50' },
 ];
 
 describe('Component ResultBox', () => {
@@ -20,19 +20,7 @@ describe('Component ResultBox', () => {
 
       const resultField = screen.getByTestId('result');
 
-      const fromCurrencySymbol = testCase.from === 'USD' ? '$' : 'PLN ';
-      const toCurrencySymbol = testCase.to === 'USD' ? '$' : 'PLN ';
-
-      let amount = Number(testCase.amount).toFixed(2);
-      if (amount.split('.')[1].length === 1) {
-        // jeśli wartość amount ma jedno miejsce po przecinku, dodaj zero
-        amount += '0';
-      } else if (amount.split('.')[1].length === 0) {
-        // jeśli wartość amount nie ma miejsc po przecinku, dodaj dwa zera
-        amount += '.00';
-      }
-
-      expect(resultField).toHaveTextContent(fromCurrencySymbol + amount + ' = ' + toCurrencySymbol + testCase.result);
+      expect(resultField).toHaveTextContent(testCase.expectedResult);
 
       cleanup();
     });
